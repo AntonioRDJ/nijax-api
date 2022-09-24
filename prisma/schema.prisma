@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model User {
+  id               Int               @id @default(autoincrement())
+  name             String
+  email            String            @unique
+  password         String
+  cellphone        String            @unique
+  cpf_cnpj         String            @unique
+  isCompany        Boolean           @default(false)
+  created_at       DateTime          @default(now())
+  updated_at       DateTime          @updatedAt
+  deleted_at       DateTime?
+  request          Request[]
+  provider Provider?
+}
+
+model Request {
+  id          Int         @id @default(autoincrement())
+  user        User        @relation(fields: [user_id], references: [id])
+  user_id     Int
+  service     Service     @relation(fields: [service_id], references: [id])
+  service_id  Int
+  status      Status      @default(OPENED)
+  title       String
+  description String
+  address     String
+  // fotos?
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  deleted_at  DateTime?
+  candidacy   Candidacy[]
+}
+
+model Candidacy {
+  id          Int       @id @default(autoincrement())
+  request     Request   @relation(fields: [request_id], references: [id])
+  request_id  Int
+  provider    Provider  @relation(fields: [provider_id], references: [id])
+  provider_id Int
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  deleted_at  DateTime?
+}
+
+model Provider {
+  id              Int         @id @default(autoincrement())
+  user            User        @relation(fields: [user_id], references: [id])
+  user_id         Int         @unique
+  fantasy_name    String
+  address         String
+  experiences     Json
+  formations      Json
+  social_networks Json
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  deleted_at      DateTime?
+  candidacy       Candidacy[]
+  provider_service Provider_Service[]
+}
+
+model Provider_Service {
+  id          Int       @id @default(autoincrement())
+  service     Service   @relation(fields: [service_id], references: [id])
+  service_id  Int
+  provider    Provider  @relation(fields: [provider_id], references: [id])
+  provider_id Int
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  deleted_at  DateTime?
+}
+
+model Service {
+  id                       Int                @id @default(autoincrement())
+  name                     String             @unique
+  created_at               DateTime           @default(now())
+  updated_at               DateTime           @updatedAt
+  deleted_at               DateTime?
+  request                  Request[]
+  service_provider_service Provider_Service[]
+}
+
+enum Status {
+  OPENED
+  NEGOTIATION
+  CLOSED
+}
