@@ -19,7 +19,7 @@ model User {
   password         String
   cellphone        String            @unique
   cpf_cnpj         String            @unique
-  isCompany        Boolean           @default(false)
+  is_company        Boolean           @default(false)
   created_at       DateTime          @default(now())
   updated_at       DateTime          @updatedAt
   deleted_at       DateTime?
