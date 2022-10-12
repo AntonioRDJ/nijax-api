@@ -3,28 +3,26 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id               Int               @id @default(autoincrement())
-  name             String
-  email            String            @unique
-  password         String
-  cellphone        String            @unique
-  cpf_cnpj         String            @unique
-  is_company        Boolean           @default(false)
-  created_at       DateTime          @default(now())
-  updated_at       DateTime          @updatedAt
-  deleted_at       DateTime?
-  request          Request[]
-  provider Provider?
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String    @unique
+  password   String
+  cellphone  String    @unique
+  cpf_cnpj   String    @unique
+  is_company Boolean   @default(false)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  request    Request[]
+  provider   Provider?
 }
 
 model Request {
@@ -37,7 +35,6 @@ model Request {
   title       String
   description String
   address     String
-  // fotos?
   created_at  DateTime    @default(now())
   updated_at  DateTime    @updatedAt
   deleted_at  DateTime?
@@ -56,18 +53,18 @@ model Candidacy {
 }
 
 model Provider {
-  id              Int         @id @default(autoincrement())
-  user            User        @relation(fields: [user_id], references: [id])
-  user_id         Int         @unique
-  fantasy_name    String
-  address         String
-  experiences     Json
-  formations      Json
-  social_networks Json
-  created_at      DateTime    @default(now())
-  updated_at      DateTime    @updatedAt
-  deleted_at      DateTime?
-  candidacy       Candidacy[]
+  id               Int                @id @default(autoincrement())
+  user             User               @relation(fields: [user_id], references: [id])
+  user_id          Int                @unique
+  fantasy_name     String
+  address          String
+  experiences      Json
+  formations       Json
+  social_networks  Json
+  created_at       DateTime           @default(now())
+  updated_at       DateTime           @updatedAt
+  deleted_at       DateTime?
+  candidacy        Candidacy[]
   provider_service Provider_Service[]
 }
 
