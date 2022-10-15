@@ -1,5 +1,6 @@
 import { Router } from "express";
-import apiRoutes from "./api.routes";
+import apiRoutes from "./api";
+import notFound from "./notFound.routes";
 
 const router = Router();
 
@@ -8,5 +9,7 @@ router.use("/ping", (req, res) => {
 });
 
 router.use("/api", apiRoutes);
+
+router.use(notFound);
 
 export default router;

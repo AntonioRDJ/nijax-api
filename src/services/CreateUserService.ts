@@ -1,5 +1,7 @@
 import { injectable } from "tsyringe";
 import { UserRepository } from "../repositories/UserRepository";
+import { signAccessToken } from "../utils/jwt";
+import { generateHash } from "../utils/bcrypt";
 
 @injectable()
 export class CreateUserService {
@@ -8,7 +10,8 @@ export class CreateUserService {
   ) {}
 
   async execute(createUser: CreateUser, createProvider: CreateProvider) {
-    return await this.userRepository.create({
+    createUser.password = generateHash(createUser.password);
+    let user = await this.userRepository.create({
       ...createUser,
       provider: createUser.isCompany ? {
         create: {
@@ -16,6 +19,10 @@ export class CreateUserService {
         }
       } : undefined
     });
+    
+    const accessToken = signAccessToken(user);
+    const {password: rPassword , ...userWithoutPassword} = user;
+    return {...userWithoutPassword, accessToken};
   }
 }
 

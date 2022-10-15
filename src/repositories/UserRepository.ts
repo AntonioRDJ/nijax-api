@@ -10,6 +10,14 @@ export class UserRepository {
     this.userRepository = prisma.user;
   }
 
+  findByEmail(email: string) {
+    return this.userRepository.findUnique({
+      where: {
+        email
+      }
+    });
+  }
+
   findAll() {
     return this.userRepository.findMany({
       include: {
@@ -21,6 +29,9 @@ export class UserRepository {
   create(input: Prisma.UserCreateInput) {
     return this.userRepository.create({
       data: input,
+      include: {
+        provider: true,
+      }
     })
   }
 };
