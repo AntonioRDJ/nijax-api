@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -11,82 +11,90 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  name       String
-  email      String    @unique
-  password   String
-  cellphone  String    @unique
-  cpf_cnpj   String    @unique
-  is_company Boolean   @default(false)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  deleted_at DateTime?
-  request    Request[]
-  provider   Provider?
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  cellphone String    @unique
+  cpfCnpj   String    @unique @map("cpf_cnpj")
+  isCompany Boolean   @default(false) @map("is_company")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  request   Order[]
+  provider  Provider?
+
+  @@map("user")
 }
 
-model Request {
+model Order {
   id          Int         @id @default(autoincrement())
-  user        User        @relation(fields: [user_id], references: [id])
-  user_id     Int
-  service     Service     @relation(fields: [service_id], references: [id])
-  service_id  Int
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String      @map("user_id")
+  service     Service     @relation(fields: [serviceId], references: [id])
+  serviceId   Int         @map("service_id")
   status      Status      @default(OPENED)
   title       String
   description String
   address     String
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @updatedAt
-  deleted_at  DateTime?
+  createdaAt  DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  deletedAt   DateTime?   @map("deleted_at")
   candidacy   Candidacy[]
+
+  @@map("order")
 }
 
 model Candidacy {
-  id          Int       @id @default(autoincrement())
-  request     Request   @relation(fields: [request_id], references: [id])
-  request_id  Int
-  provider    Provider  @relation(fields: [provider_id], references: [id])
-  provider_id Int
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  deleted_at  DateTime?
+  id         Int       @id @default(autoincrement())
+  request    Order   @relation(fields: [requestId], references: [id])
+  requestId  Int       @map("request_id")
+  provider   Provider  @relation(fields: [providerId], references: [id])
+  providerId Int       @map("provider_id")
+  createdaAt DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  @@map("candidacy")
 }
 
 model Provider {
-  id               Int                @id @default(autoincrement())
-  user             User               @relation(fields: [user_id], references: [id])
-  user_id          Int                @unique
-  fantasy_name     String
-  address          String
-  experiences      Json
-  formations       Json
-  social_networks  Json
-  created_at       DateTime           @default(now())
-  updated_at       DateTime           @updatedAt
-  deleted_at       DateTime?
-  candidacy        Candidacy[]
-  provider_service Provider_Service[]
+  id              Int               @id @default(autoincrement())
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String            @unique
+  fantasyName     String            @map("fantasy_name")
+  address         String
+  experiences     Json
+  formations      Json
+  socialNetworks  Json              @map("social_networks")
+  createdaAt      DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+  deletedAt       DateTime?         @map("deleted_at")
+  candidacy       Candidacy[]
+  providerService ProviderService[]
+
+  @@map("provider")
 }
 
-model Provider_Service {
-  id          Int       @id @default(autoincrement())
-  service     Service   @relation(fields: [service_id], references: [id])
-  service_id  Int
-  provider    Provider  @relation(fields: [provider_id], references: [id])
-  provider_id Int
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  deleted_at  DateTime?
+model ProviderService {
+  id         Int      @id @default(autoincrement())
+  service    Service  @relation(fields: [serviceId], references: [id])
+  serviceId  Int      @map("service_id")
+  provider   Provider @relation(fields: [providerId], references: [id])
+  providerId Int      @map("provider_id")
+
+  @@map("provider_service")
 }
 
 model Service {
-  id                       Int                @id @default(autoincrement())
-  name                     String             @unique
-  created_at               DateTime           @default(now())
-  updated_at               DateTime           @updatedAt
-  deleted_at               DateTime?
-  request                  Request[]
-  service_provider_service Provider_Service[]
+  id                     Int               @id @default(autoincrement())
+  name                   String            @unique
+  createdaAt             DateTime          @default(now()) @map("created_at")
+  updatedAt              DateTime          @updatedAt @map("updated_at")
+  request                Order[]
+  serviceProviderService ProviderService[]
+
+  @@map("service")
 }
 
 enum Status {
