@@ -14,6 +14,9 @@ export class UserRepository {
     return this.userRepository.findUnique({
       where: {
         email
+      },
+      include: {
+        provider: true,
       }
     });
   }

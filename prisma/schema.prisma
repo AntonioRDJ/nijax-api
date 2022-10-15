@@ -16,7 +16,8 @@ model User {
   email     String    @unique
   password  String
   cellphone String    @unique
-  cpfCnpj   String    @unique @map("cpf_cnpj")
+  cpfCnpj   Int       @unique @map("cpf_cnpj")
+  birthDate DateTime  @map("birth_date")
   isCompany Boolean   @default(false) @map("is_company")
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -47,7 +48,7 @@ model Order {
 
 model Candidacy {
   id         Int       @id @default(autoincrement())
-  request    Order   @relation(fields: [requestId], references: [id])
+  request    Order     @relation(fields: [requestId], references: [id])
   requestId  Int       @map("request_id")
   provider   Provider  @relation(fields: [providerId], references: [id])
   providerId Int       @map("provider_id")

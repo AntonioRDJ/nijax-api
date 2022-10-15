@@ -28,10 +28,11 @@ export class CreateUserService {
 
 interface CreateUser {
   cellphone: string;
-  cpfCnpj: string;
+  cpfCnpj: number;
   email: string;
   name: string;
   password: string;
+  birthDate: string;
   isCompany?: boolean;
 };
 

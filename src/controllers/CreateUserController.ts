@@ -12,13 +12,14 @@ export class CreateUserController extends Controller {
   }
 
   async handle(req: Request, res: Response): Promise<void> {
-    const {
+    let {
       cellphone,
       cpfCnpj,
       email,
       name,
       password,
       isCompany,
+      birthDate,
       address,
       fantasyName,
       experiences,
@@ -26,12 +27,14 @@ export class CreateUserController extends Controller {
       socialNetworks,
     } = req.body;
 
-    const data = await this.createUserService.execute({
+    birthDate = new Date(birthDate);
+    const {accessToken, ...user} = await this.createUserService.execute({
       cellphone,
       cpfCnpj,
       email,
       name,
       password,
+      birthDate,
       isCompany,
     }, {
       address,
@@ -41,6 +44,11 @@ export class CreateUserController extends Controller {
       socialNetworks,
     });
 
-    res.status(200).json(data);
+    res.status(200).json({
+      data: {
+        accessToken,
+        user,
+      }
+    });
   }
 }

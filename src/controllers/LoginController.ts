@@ -17,11 +17,14 @@ export class LoginController extends Controller {
       password,
     } = req.body;
 
-    const accessToken = await this.loginService.execute(email, password);
+    const { accessToken, ...user} = await this.loginService.execute(email, password);
 
     res.status(200).json({
       message: "Login successfully",
-      data: accessToken
+      data: {
+        accessToken,
+        user,
+      }
     })
   }
 }
