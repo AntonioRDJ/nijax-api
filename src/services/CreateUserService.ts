@@ -2,6 +2,7 @@ import { injectable } from "tsyringe";
 import { UserRepository } from "../repositories/UserRepository";
 import { signAccessToken } from "../utils/jwt";
 import { generateHash } from "../utils/bcrypt";
+import createHttpError from "http-errors";
 
 @injectable()
 export class CreateUserService {
@@ -11,6 +12,13 @@ export class CreateUserService {
 
   async execute(createUser: CreateUser, createProvider: CreateProvider) {
     createUser.password = generateHash(createUser.password);
+
+    const foundUser = await this.userRepository.findByEmail(createUser.email);
+
+    if(foundUser){
+      throw new createHttpError.BadRequest("Email invalid");
+    }
+
     let user = await this.userRepository.create({
       ...createUser,
       provider: createUser.isCompany ? {
