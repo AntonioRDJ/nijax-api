@@ -22,8 +22,7 @@ export class LoginController extends Controller {
     res.status(200).json({
       message: "Login successfully",
       data: {
-        accessToken,
-        user,
+        token: accessToken
       }
     })
   }
