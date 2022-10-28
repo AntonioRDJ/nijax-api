@@ -1,3 +1,4 @@
+import createHttpError from "http-errors";
 import { injectable } from "tsyringe";
 import { RequestRepository } from "../repositories/RequestRepository";
 
@@ -12,17 +13,20 @@ interface RequestSimple {
 }
 
 @injectable()
-export class CreateRequestService {
+export class FindRequestService {
   constructor(
     private requestRepository: RequestRepository,
   ) {}
 
-  async execute(request : RequestSimple) {
+  async execute(id : number) {
     
-    request.status = 'OPENED';
+    const found = await this.requestRepository.find(id)
 
-    return this.requestRepository.create(request)
+    if(!found){
+      throw new createHttpError.NotFound("Request Not Found");
+    }
 
+    return found;
 
   }
 }

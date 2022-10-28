@@ -1,14 +1,16 @@
 import { Response } from "express";
+import createHttpError from "http-errors";
 import { injectable } from "tsyringe";
 import { Request } from "../@types/express";
 import { CreateRequestService } from "../services/CreateRequestService";
 import { CreateUserService } from "../services/CreateUserService";
+import { UpdateRequestService } from "../services/UpdateRequestService";
 import { Controller } from "./Controller"
 
 @injectable()
-export class CreateRequestController extends Controller {
+export class UpdateRequestController extends Controller {
   constructor(
-    private createRequestService: CreateRequestService,
+    private service: UpdateRequestService,
   ) {
     super();
   }
@@ -34,9 +36,15 @@ export class CreateRequestController extends Controller {
 
     req.body.userId = req.user?.id;
 
+    req.body.id = +req.params.requestId;
+
+    if(isNaN(req.body.id)){
+      throw new createHttpError.BadRequest("Invalid Request Id");
+    }
+    
     res.status(200).json({
       data: {
-        request: await this.createRequestService.execute(req.body)
+        request: await this.service.execute(req.body)
       }
     });
   }

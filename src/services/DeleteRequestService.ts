@@ -12,17 +12,12 @@ interface RequestSimple {
 }
 
 @injectable()
-export class CreateRequestService {
+export class DeleteRequestService {
   constructor(
     private requestRepository: RequestRepository,
   ) {}
 
-  async execute(request : RequestSimple) {
-    
-    request.status = 'OPENED';
-
-    return this.requestRepository.create(request)
-
-
+  async execute(id : number) {
+    return this.requestRepository.delete(id)
   }
 }
