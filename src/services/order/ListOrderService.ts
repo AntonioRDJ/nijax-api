@@ -1,5 +1,5 @@
 import { injectable } from "tsyringe";
-import { RequestRepository } from "../repositories/RequestRepository";
+import { OrderRepository } from "../../repositories/OrderRepository";
 
 interface Payload {
   limit : number,
@@ -7,9 +7,9 @@ interface Payload {
 }
 
 @injectable()
-export class ListRequestService {
+export class ListOrderService {
   constructor(
-    private repository: RequestRepository,
+    private repository: OrderRepository,
   ) {}
 
   async execute(payload : Payload) {

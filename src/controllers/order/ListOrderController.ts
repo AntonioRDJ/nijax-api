@@ -1,13 +1,13 @@
 import { Response } from "express";
 import { injectable } from "tsyringe";
-import { Request } from "../@types/express";
-import { ListRequestService } from "../services/ListRequestService";
-import { Controller } from "./Controller"
+import { Request } from "../../@types/express";
+import { Controller } from "../Controller";
+import { ListOrderService } from "../..//services/order/ListOrderService";
 
 @injectable()
-export class ListRequestController extends Controller {
+export class ListOrderController extends Controller {
   constructor(
-    private service: ListRequestService,
+    private service: ListOrderService,
   ) {
     super();
   }
@@ -22,7 +22,7 @@ export class ListRequestController extends Controller {
 
     res.status(200).json({
       data: {
-        requests: await this.service.execute({ limit , offset } as any)
+        orders: await this.service.execute({ limit , offset } as any)
       }
     });
   }

@@ -1,14 +1,14 @@
 import { Response } from "express";
+import createHttpError from "http-errors";
 import { injectable } from "tsyringe";
-import { Request } from "../@types/express";
-import { CreateRequestService } from "../services/CreateRequestService";
-import { CreateUserService } from "../services/CreateUserService";
-import { Controller } from "./Controller"
+import { Request } from "../../@types/express";
+import { UpdateOrderService } from "../../services/order/UpdateOrderService";
+import { Controller } from "../Controller";
 
 @injectable()
-export class CreateRequestController extends Controller {
+export class UpdateOrderController extends Controller {
   constructor(
-    private createRequestService: CreateRequestService,
+    private service: UpdateOrderService,
   ) {
     super();
   }
@@ -34,9 +34,15 @@ export class CreateRequestController extends Controller {
 
     req.body.userId = req.user?.id;
 
+    req.body.id = req.params.orderId;
+
+    if(!req.body.id) {
+      throw new createHttpError.BadRequest("Invalid Request Id");
+    }
+    
     res.status(200).json({
       data: {
-        request: await this.createRequestService.execute(req.body)
+        order: await this.service.execute(req.body)
       }
     });
   }

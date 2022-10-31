@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
-import { UserRepository } from "../repositories/UserRepository";
-import { signAccessToken } from "../utils/jwt";
-import { generateHash } from "../utils/bcrypt";
+import { UserRepository } from "../../repositories/UserRepository";
+import { signAccessToken } from "../../utils/jwt";
+import { generateHash } from "../../utils/bcrypt";
 import createHttpError from "http-errors";
 
 @injectable()

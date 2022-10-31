@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
-import { LoginService } from "../services/LoginService";
+import { LoginService } from "../services/auth/LoginService";
 import { Controller } from "./Controller"
 
 @injectable()

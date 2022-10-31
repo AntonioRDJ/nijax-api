@@ -1,8 +1,8 @@
 import { injectable } from "tsyringe";
-import { UserRepository } from "../repositories/UserRepository";
+import { UserRepository } from "../../repositories/UserRepository";
 import createError from "http-errors";
-import { validationHash } from "../utils/bcrypt";
-import { signAccessToken } from "../utils/jwt";
+import { validationHash } from "../../utils/bcrypt";
+import { signAccessToken } from "../../utils/jwt";
 @injectable()
 export class LoginService {
   constructor(
