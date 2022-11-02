@@ -16,7 +16,15 @@ export class UserRepository {
         email
       },
       include: {
-        provider: true,
+        provider: {
+          include:  {
+            providerService: {
+              include: {
+                service: true,
+              }
+            }
+          }
+        },
       }
     });
   }
@@ -29,12 +37,20 @@ export class UserRepository {
     });
   }
 
-  create(input: Prisma.UserCreateInput) {
+  create(user: Prisma.UserCreateInput) {
     return this.userRepository.create({
-      data: input,
+      data: user,
       include: {
-        provider: true,
-      }
+        provider: {
+          include: {
+            providerService: {
+              include: {
+                service: true,
+              }
+            }
+          }
+        },
+      },
     })
   }
 };

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
-import { LoginService } from "../services/LoginService";
+import { LoginService } from "../services/auth/LoginService";
 import { Controller } from "./Controller"
 
 @injectable()
@@ -17,13 +17,13 @@ export class LoginController extends Controller {
       password,
     } = req.body;
 
-    const { accessToken, ...user} = await this.loginService.execute(email, password);
+    const { accessToken, ...user } = await this.loginService.execute(email, password);
 
     res.status(200).json({
       message: "Login successfully",
       data: {
-        accessToken,
         user,
+        accessToken,
       }
     })
   }

@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import createError from "http-errors";
-import { UserWithoutPassword } from "../types";
+import { UserWithoutPassword } from "../@types/index";
 import { verifyAccessToken } from "../utils/jwt";
+import { Request } from "../@types/express";
 
 export default async function auth(req: Request, res: Response, next: NextFunction) {
   if(!req.headers.authorization) {
