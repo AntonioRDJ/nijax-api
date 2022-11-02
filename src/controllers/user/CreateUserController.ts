@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
-import { CreateUserService } from "../../services/user/CreateUserService";
+import { CreateProvider, CreateUser, CreateUserService } from "../../services/user/CreateUserService";
 import { Controller } from "../Controller"
 
 @injectable()
@@ -20,29 +20,36 @@ export class CreateUserController extends Controller {
       password,
       isCompany,
       birthDate,
-      address,
       fantasyName,
+      address,
+      service,
       experiences,
       formations,
       socialNetworks,
     } = req.body;
 
-    birthDate = new Date(birthDate);
-    const {accessToken, ...user} = await this.createUserService.execute({
+    const createUser: CreateUser = {
       cellphone,
       cpfCnpj,
       email,
       name,
       password,
-      birthDate,
       isCompany,
-    }, {
-      address,
+      birthDate,
+    };
+
+    const createProvider: CreateProvider = {
       fantasyName,
+      address,
+      service,
       experiences,
       formations,
       socialNetworks,
-    });
+    };
+
+    createUser.birthDate = new Date(createUser.birthDate).toISOString();
+    
+    const {accessToken, ...user} = await this.createUserService.execute(createUser, createProvider);
 
     res.status(200).json({
       data: {

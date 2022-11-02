@@ -22,7 +22,7 @@ export class LoginService {
     }
 
     const {password: rPassword , ...userWithoutPassword} = user;
-    const accessToken = signAccessToken({ ...userWithoutPassword, password : undefined});
-    return {...userWithoutPassword, accessToken}
+    const accessToken = signAccessToken(userWithoutPassword);
+    return {...userWithoutPassword, accessToken};
   }
 }

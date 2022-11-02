@@ -14,7 +14,6 @@ export class FindOrderController extends Controller {
   }
 
   async handle(req: Request, res: Response): Promise<void> {
-    console.log("params ", req.params);
     
     const id = req.params.orderId;
 

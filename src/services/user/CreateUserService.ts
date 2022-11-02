@@ -3,6 +3,8 @@ import { UserRepository } from "../../repositories/UserRepository";
 import { signAccessToken } from "../../utils/jwt";
 import { generateHash } from "../../utils/bcrypt";
 import createHttpError from "http-errors";
+import { Service } from "../../utils/constants";
+import { Experience, Formation, SocialNetwork } from "../../types/provider";
 
 @injectable()
 export class CreateUserService {
@@ -18,14 +20,27 @@ export class CreateUserService {
     if(foundUser){
       throw new createHttpError.BadRequest("Email invalid");
     }
-
+    createProvider.experiences = createProvider.experiences;
     let user = await this.userRepository.create({
       ...createUser,
       provider: createUser.isCompany ? {
         create: {
-          ...createProvider
-        }
-      } : undefined
+          fantasyName: createProvider.fantasyName ?? "",
+          address: createProvider.address,
+          experiences: JSON.stringify(createProvider.experiences),
+          formations: JSON.stringify(createProvider.formations),
+          socialNetworks: JSON.stringify(createProvider.socialNetworks),
+          providerService: {
+            create: {
+              service: {
+                connect: {
+                  name: createProvider.service
+                }
+              }
+            }
+          },
+        },
+      } : undefined,
     });
     
     const accessToken = signAccessToken(user);
@@ -34,20 +49,21 @@ export class CreateUserService {
   }
 }
 
-interface CreateUser {
+export interface CreateUser {
   cellphone: string;
   cpfCnpj: number;
   email: string;
   name: string;
   password: string;
-  birthDate: string;
+  birthDate: string | Date;
   isCompany?: boolean;
 };
 
-interface CreateProvider {
+export interface CreateProvider {
+  fantasyName?: string,
   address: string,
-  fantasyName: string,
-  experiences: any,
-  formations: any,
-  socialNetworks: any,
+  experiences: Experience[],
+  formations: Formation[],
+  socialNetworks: SocialNetwork[],
+  service: Service;
 };

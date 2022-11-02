@@ -16,7 +16,15 @@ export class UserRepository {
         email
       },
       include: {
-        provider: true,
+        provider: {
+          include:  {
+            providerService: {
+              include: {
+                service: true,
+              }
+            }
+          }
+        },
       }
     });
   }
@@ -33,8 +41,16 @@ export class UserRepository {
     return this.userRepository.create({
       data: user,
       include: {
-        provider: true,
-      }
+        provider: {
+          include: {
+            providerService: {
+              include: {
+                service: true,
+              }
+            }
+          }
+        },
+      },
     })
   }
 };

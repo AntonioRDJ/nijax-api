@@ -14,15 +14,22 @@ export class ListOrderController extends Controller {
 
   async handle(req: Request, res: Response): Promise<void> {
 
-    let { limit , offset } = req.query as any;
+    let {
+      limit,
+      offset,
+      service,
+      forProvider,
+    } = req.query as any;
 
+    const userId = req.user?.id!;
+    
     limit = limit ? +limit : 20;
     offset = offset ? +offset : 0;
     
 
     res.status(200).json({
       data: {
-        orders: await this.service.execute({ limit , offset } as any)
+        orders: await this.service.execute({ limit, offset, userId, service, forProvider } as any)
       }
     });
   }

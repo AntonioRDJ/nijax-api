@@ -1,6 +1,7 @@
 import { Prisma, Status } from "@prisma/client";
 import { injectable } from "tsyringe";
 import prisma from "../client";
+import { Service } from "../utils/constants";
 
 @injectable()
 export class OrderRepository {
@@ -25,16 +26,29 @@ export class OrderRepository {
             id: userId,
           }
         }
+      },
+      include: {
+        service: true,
       }
     })
   }
 
-  list(data: any) {
+  list(data: ListOrderParams) {
     return this.orderRepository.findMany({
       skip: data.offset,
       take: data.limit,
       where : {
         deletedAt : null,
+        userId: {
+          equals: !data.forProvider ? data.userId : undefined,
+          not: data.forProvider ? data.userId : undefined,
+        },
+        service: {
+          name: data.service,
+        }
+      },
+      include: {
+        service: true,
       }
     })
   }
@@ -44,6 +58,9 @@ export class OrderRepository {
       where: {
         id: id,
         deletedAt : null,
+      },
+      include: {
+        service: true,
       }
     })
   }
@@ -62,6 +79,9 @@ export class OrderRepository {
       where: {
         id,
       },
+      include: {
+        service: true,
+      }
     })
   }
 
@@ -95,3 +115,11 @@ export interface OrderToUpdate {
   userId: string;
   service: string;
 };
+
+export interface ListOrderParams {
+  limit: number;
+  offset: number;
+  userId?: string;
+  service?: Service;
+  forProvider?: boolean;
+}

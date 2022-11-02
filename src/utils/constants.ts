@@ -5,3 +5,11 @@ export const enum Service {
   LESSON = 'LESSON',
   AUTOMOBILES = 'AUTOMOBILES'
 };
+
+export enum SocialNetworkEnum {
+  FACEBOOK = "FACEBOOK",
+  INSTAGRAM = "INSTAGRAM",
+  TWITTER = "TWITTER",
+  LINKEDIN = "LINKEDIN",
+  YOUTUBE = "YOUTUBE",
+};
