@@ -14,17 +14,22 @@ export class UserRepository {
     return this.userRepository.findUnique({
       where: {
         email
-      },
-      include: {
-        provider: {
-          include:  {
-            providerService: {
-              include: {
-                service: true,
-              }
-            }
-          }
-        },
+      }
+    });
+  }
+
+  findByCellphone(cellphone: string) {
+    return this.userRepository.findUnique({
+      where: {
+        cellphone
+      }
+    });
+  }
+
+  findByCpfCnpj(cpfCnpj: number) {
+    return this.userRepository.findUnique({
+      where: {
+        cpfCnpj
       }
     });
   }
