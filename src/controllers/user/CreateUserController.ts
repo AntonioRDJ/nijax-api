@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
+import { GetLocationService } from "../../services/location/GetLocationService";
 import { CreateProvider, CreateUser, CreateUserService } from "../../services/user/CreateUserService";
 import { Controller } from "../Controller"
 
@@ -7,6 +8,7 @@ import { Controller } from "../Controller"
 export class CreateUserController extends Controller {
   constructor(
     private createUserService: CreateUserService,
+    private getLocationService: GetLocationService,
   ) {
     super();
   }
@@ -21,7 +23,12 @@ export class CreateUserController extends Controller {
       isCompany,
       birthDate,
       fantasyName,
-      address,
+      cep,
+      street,
+      district,
+      city,
+      state,
+      number,
       service,
       experiences,
       formations,
@@ -38,14 +45,34 @@ export class CreateUserController extends Controller {
       birthDate,
     };
 
-    const createProvider: CreateProvider = {
+    let createProvider: CreateProvider = {
       fantasyName,
-      address,
+      cep,
+      street,
+      district,
+      city,
+      state,
+      number,
       service,
       experiences,
       formations,
       socialNetworks,
+      lat: "",
+      lng: "",
     };
+
+    if(isCompany) {
+      const location = await this.getLocationService.execute({
+        cep,
+        street,
+        district,
+        city,
+        state,
+        number,
+      });
+      createProvider.lat = location.lat;
+      createProvider.lng = location.lng;
+    }
 
     createUser.birthDate = new Date(createUser.birthDate).toISOString();
     

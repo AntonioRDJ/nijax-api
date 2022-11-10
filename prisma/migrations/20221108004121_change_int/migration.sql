@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "user" ALTER COLUMN "cpf_cnpj" SET DATA TYPE BIGINT;

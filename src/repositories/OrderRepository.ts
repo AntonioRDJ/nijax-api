@@ -12,24 +12,18 @@ export class OrderRepository {
   }
 
   create(order: OrderToCreate) {
-    const {userId, service, ...rest} = order;
+    const {userId, ...rest} = order;
     return this.orderRepository.create({
       data: {
         ...rest,
-        service: {
-          connect: {
-            name: service,
-          }
-        },
+        lat: parseFloat(rest.lat),
+        lng: parseFloat(rest.lng),
         user: {
           connect: {
             id: userId,
           }
         }
       },
-      include: {
-        service: true,
-      }
     })
   }
 
@@ -44,11 +38,8 @@ export class OrderRepository {
           not: data.forProvider ? data.userId : undefined,
         },
         service: {
-          name: data.service,
+          equals: data.service,
         }
-      },
-      include: {
-        service: true,
       }
     })
   }
@@ -58,29 +49,18 @@ export class OrderRepository {
       where: {
         id: id,
         deletedAt : null,
-      },
-      include: {
-        service: true,
       }
     })
   }
 
   update(order: OrderToUpdate) {
-    const { userId, id, service, ...rest } = order;    
+    const { userId, id, ...rest } = order;    
     return this.orderRepository.update({
       data: {
         ...rest,
-        service: {
-          connect: {
-            name: service,
-          }
-        }
       },
       where: {
         id,
-      },
-      include: {
-        service: true,
       }
     })
   }
@@ -99,11 +79,18 @@ export class OrderRepository {
 
 export interface OrderToCreate {
   title: string;
-  address: string;
   description: string;
   status: Status;
   userId: string;
-  service: string;
+  service: Service;
+  cep: string,
+  street: string,
+  district: string,
+  city: string,
+  state: string,
+  number: string,
+  lat: string,
+  lng: string,
 };
 
 export interface OrderToUpdate {
@@ -113,7 +100,7 @@ export interface OrderToUpdate {
   description: string;
   status: Status;
   userId: string;
-  service: string;
+  service: Service;
 };
 
 export interface ListOrderParams {

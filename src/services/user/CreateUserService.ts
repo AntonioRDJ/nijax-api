@@ -25,25 +25,20 @@ export class CreateUserService {
       ...createUser,
       provider: createUser.isCompany ? {
         create: {
+          ...createProvider,
           fantasyName: createProvider.fantasyName ?? "",
-          address: createProvider.address,
+          lat: parseFloat(createProvider.lat),
+          lng: parseFloat(createProvider.lng),
           experiences: JSON.stringify(createProvider.experiences),
           formations: JSON.stringify(createProvider.formations),
           socialNetworks: JSON.stringify(createProvider.socialNetworks),
-          providerService: {
-            create: {
-              service: {
-                connect: {
-                  name: createProvider.service
-                }
-              }
-            }
-          },
         },
       } : undefined,
     });
     
-    const accessToken = signAccessToken(user);
+    const accessToken = signAccessToken({
+      id: user.id,
+    });
     const {password: rPassword , ...userWithoutPassword} = user;
     return {...userWithoutPassword, accessToken};
   }
@@ -61,9 +56,16 @@ export interface CreateUser {
 
 export interface CreateProvider {
   fantasyName?: string,
-  address: string,
+  service: Service;
+  cep: string;
+  street: string;
+  district: string;
+  city: string;
+  state: string;
+  number: string;
+  lat: string;
+  lng: string;
   experiences: Experience[],
   formations: Formation[],
   socialNetworks: SocialNetwork[],
-  service: Service;
 };

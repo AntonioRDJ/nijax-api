@@ -1,11 +1,6 @@
 import app from "./app";
-import dotenv from "dotenv";
-import dotenvExpand from "dotenv-expand";
-const env = dotenv.config();
-dotenvExpand.expand(env);
+import { Config } from "./config";
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running at Port: ${PORT}`);
+app.listen(Config.PORT, () => {
+  console.log(`Server running at Port: ${Config.PORT}`);
 });
