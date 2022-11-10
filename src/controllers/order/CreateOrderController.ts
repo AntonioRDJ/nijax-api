@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { injectable } from "tsyringe";
 import { Request } from "../../@types/express";
+import { GetLocationService } from "../../services/location/GetLocationService";
 import { CreateOrderService } from "../../services/order/CreateOrderService";
 import { Controller } from "../Controller"
 
@@ -8,6 +9,7 @@ import { Controller } from "../Controller"
 export class CreateOrderController extends Controller {
   constructor(
     private createOrderService: CreateOrderService,
+    private getLocationService: GetLocationService,
   ) {
     super();
   }
@@ -16,9 +18,14 @@ export class CreateOrderController extends Controller {
 
     let keys = [
       'title',
-      'address',
       'description',
       'service',
+      'cep',
+      'street',
+      'district',
+      'city',
+      'state',
+      'number',
     ];
 
     for (const key of keys) {
@@ -32,6 +39,27 @@ export class CreateOrderController extends Controller {
     }
 
     req.body.userId = req.user?.id;
+
+    const {
+      cep,
+      street,
+      district,
+      city,
+      state,
+      number,
+    } = req.body;
+
+    const location = await this.getLocationService.execute({
+      cep,
+      street,
+      district,
+      city,
+      state,
+      number,
+    });
+
+    req.body.lat = location.lat;
+    req.body.lng = location.lng;
 
     res.status(200).json({
       data: {

@@ -46,15 +46,7 @@ export class UserRepository {
     return this.userRepository.create({
       data: user,
       include: {
-        provider: {
-          include: {
-            providerService: {
-              include: {
-                service: true,
-              }
-            }
-          }
-        },
+        provider: true,
       },
     })
   }
