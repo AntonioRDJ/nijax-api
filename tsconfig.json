@@ -16,7 +16,8 @@
     "strict": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
+    "allowJs": true,
   },
-  "include": ["src/**/*.ts", "prisma/*"],
+  "include": ["src/**/*", "prisma/*"],
   "exclude": ["node_modules"]
 }

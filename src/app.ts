@@ -2,7 +2,8 @@ import "reflect-metadata";
 import express, { Application } from "express";
 import cors from "cors";
 import router from "./routes";
-require("../patch.js");
+require("./utils/patch.js");
+
 
 class App {
   public express: Application;
