@@ -39,6 +39,19 @@ export class OrderRepository {
         },
         service: {
           equals: data.service,
+        },
+        candidacy: data.onlyCandidate ? {
+          some: {
+            provider: {
+              userId: data.userId
+            }
+          }
+        } : {
+          none: {
+            provider: {
+              userId: data.userId
+            }
+          }
         }
       }
     })
@@ -49,12 +62,29 @@ export class OrderRepository {
       where: {
         id: id,
         deletedAt : null,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        candidacy: {
+          select: {
+            provider: {
+              include: {
+                user: true
+              }
+            }
+          }
+        },
       }
     })
   }
 
   update(order: OrderToUpdate) {
-    const { userId, id, ...rest } = order;    
+    const {id, ...rest} = order;
+      
     return this.orderRepository.update({
       data: {
         ...rest,
@@ -93,14 +123,8 @@ export interface OrderToCreate {
   lng: string,
 };
 
-export interface OrderToUpdate {
+export interface OrderToUpdate extends Prisma.OrderUpdateInput {
   id: string;
-  title: string;
-  address: string;
-  description: string;
-  status: Status;
-  userId: string;
-  service: Service;
 };
 
 export interface ListOrderParams {
@@ -109,4 +133,5 @@ export interface ListOrderParams {
   userId?: string;
   service?: Service;
   forProvider?: boolean;
+  onlyCandidate?: boolean;
 }
