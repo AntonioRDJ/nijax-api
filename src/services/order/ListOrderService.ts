@@ -8,6 +8,7 @@ interface Payload {
   userId: string;
   service?: Service;
   forProvider?: boolean;
+  onlyCandidate?: boolean;
 }
 
 @injectable()

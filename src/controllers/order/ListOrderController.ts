@@ -19,6 +19,7 @@ export class ListOrderController extends Controller {
       offset,
       service,
       forProvider,
+      onlyCandidate,
     } = req.query as any;
 
     const userId = req.user?.id!;
@@ -29,7 +30,7 @@ export class ListOrderController extends Controller {
 
     res.status(200).json({
       data: {
-        orders: await this.service.execute({ limit, offset, userId, service, forProvider } as any)
+        orders: await this.service.execute({ limit, offset, userId, service, forProvider, onlyCandidate } as any)
       }
     });
   }
