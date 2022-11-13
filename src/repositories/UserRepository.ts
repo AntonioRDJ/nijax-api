@@ -45,6 +45,17 @@ export class UserRepository {
     });
   }
 
+  findById(id: string) {
+    return this.userRepository.findUnique({
+      where: {
+        id
+      },
+      include: {
+        provider: true,
+      }
+    });
+  }
+
   create(user: Prisma.UserCreateInput) {
     return this.userRepository.create({
       data: user,

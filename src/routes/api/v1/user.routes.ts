@@ -4,6 +4,8 @@ import { CreateUserController } from "../../../controllers/user/CreateUserContro
 import { FindUserByCellphoneController } from "../../../controllers/user/FindUserByCellphoneController";
 import { FindUserByCpfCnpjController } from "../../../controllers/user/FindUserByCpfCnpjController";
 import { FindUserByEmailController } from "../../../controllers/user/FindUserByEmailController";
+import { FindUserByIdController } from "../../../controllers/user/FindUserByIdController";
+import auth from "../../../middlewares/auth";
 
 const router = Router();
 
@@ -25,6 +27,12 @@ router.get(
 router.get(
   "/by-cpf-cnpj/:cpfCnpj",
   Controller.attachToRouteHandler(FindUserByCpfCnpjController)
+);
+
+router.get(
+  "/:id",
+  auth,
+  Controller.attachToRouteHandler(FindUserByIdController)
 );
 
 export default router;
