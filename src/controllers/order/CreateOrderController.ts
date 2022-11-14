@@ -3,6 +3,7 @@ import { injectable } from "tsyringe";
 import { Request } from "../../@types/express";
 import { GetLocationService } from "../../services/location/GetLocationService";
 import { CreateOrderService } from "../../services/order/CreateOrderService";
+import { NotifyNearbyProfessionalsService } from "../../services/provider/NotifyNearbyProfessionalsService";
 import { Controller } from "../Controller"
 
 @injectable()
@@ -10,6 +11,7 @@ export class CreateOrderController extends Controller {
   constructor(
     private createOrderService: CreateOrderService,
     private getLocationService: GetLocationService,
+    private notifyNearbyProfessionalsService: NotifyNearbyProfessionalsService,
   ) {
     super();
   }
@@ -61,9 +63,12 @@ export class CreateOrderController extends Controller {
     req.body.lat = location.lat;
     req.body.lng = location.lng;
 
+    const order = await this.createOrderService.execute(req.body);
+    this.notifyNearbyProfessionalsService.execute(order);
+
     res.status(200).json({
       data: {
-        order: await this.createOrderService.execute(req.body)
+        order
       }
     });
   }
