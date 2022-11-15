@@ -5,6 +5,7 @@ import { generateHash } from "../../utils/bcrypt";
 import createHttpError from "http-errors";
 import { Service } from "../../utils/constants";
 import { Experience, Formation, SocialNetwork } from "../../types/provider";
+import { Prisma } from "@prisma/client";
 
 @injectable()
 export class CreateUserService {
@@ -20,7 +21,6 @@ export class CreateUserService {
     if(foundUser){
       throw new createHttpError.BadRequest("Email invalid");
     }
-    createProvider.experiences = createProvider.experiences;
     let user = await this.userRepository.create({
       ...createUser,
       provider: createUser.isCompany ? {
@@ -29,9 +29,9 @@ export class CreateUserService {
           fantasyName: createProvider.fantasyName ?? "",
           lat: parseFloat(createProvider.lat),
           lng: parseFloat(createProvider.lng),
-          experiences: JSON.stringify(createProvider.experiences),
-          formations: JSON.stringify(createProvider.formations),
-          socialNetworks: JSON.stringify(createProvider.socialNetworks),
+          experiences: createProvider.experiences as Prisma.JsonArray,
+          formations: createProvider.formations as Prisma.JsonArray,
+          socialNetworks: createProvider.socialNetworks as Prisma.JsonArray,
         },
       } : undefined,
     });
@@ -65,7 +65,7 @@ export interface CreateProvider {
   number: string;
   lat: string;
   lng: string;
-  experiences: Experience[],
-  formations: Formation[],
-  socialNetworks: SocialNetwork[],
+  experiences: Experience[] | Prisma.JsonArray,
+  formations: Formation[] | Prisma.JsonArray,
+  socialNetworks: SocialNetwork[] | Prisma.JsonArray,
 };

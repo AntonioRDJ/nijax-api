@@ -10,7 +10,12 @@ export class CreateOrderService {
   async execute(order: OrderToCreate) {
     
     order.status = "OPENED";
+    order.distance = kmToMetters(order.distance);
 
     return this.orderRepository.create(order);
   }
+}
+
+function kmToMetters(meters: number) {
+  return meters * 1000;
 }

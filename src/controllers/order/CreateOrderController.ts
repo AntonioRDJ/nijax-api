@@ -28,6 +28,7 @@ export class CreateOrderController extends Controller {
       'city',
       'state',
       'number',
+      'distance',
     ];
 
     for (const key of keys) {

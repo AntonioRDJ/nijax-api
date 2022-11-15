@@ -12,9 +12,9 @@ export class NotifyNearbyProfessionalsService {
 
   async execute(order: Order) {
 
-    const { lat, lng, service } = order;
+    const { lat, lng, distance, service, userId } = order;
     
-    const providers = await this.providerRepository.getNearby(lat, lng, 1200, service);
+    const providers = await this.providerRepository.getNearby(lat, lng, distance, service, userId);
     
     if(!providers || !providers.length){
       return
@@ -40,4 +40,3 @@ export class NotifyNearbyProfessionalsService {
     return providers;
   }
 }
-
