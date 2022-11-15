@@ -113,14 +113,15 @@ export interface OrderToCreate {
   status: Status;
   userId: string;
   service: Service;
-  cep: string,
-  street: string,
-  district: string,
-  city: string,
-  state: string,
-  number: string,
-  lat: string,
-  lng: string,
+  cep: string;
+  street: string;
+  district: string;
+  city: string;
+  state: string;
+  number: string;
+  lat: string;
+  lng: string;
+  distance: number;
 };
 
 export interface OrderToUpdate extends Prisma.OrderUpdateInput {

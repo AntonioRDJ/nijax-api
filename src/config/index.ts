@@ -11,4 +11,9 @@ export const Config = {
   MAPS_API_URL: process.env.MAPS_API_URL ?? "",
   MAPS_API_KEY: process.env.MAPS_API_KEY ?? "",
   TOKEN_SECRET: process.env.TOKEN_SECRET ?? "",
+  TWILIO: {
+    ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID ?? "",
+    AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN ?? "",
+    PHONE: process.env.TWILIO_PHONE ?? "",
+  }
 };
