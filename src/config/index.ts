@@ -14,6 +14,6 @@ export const Config = {
   TWILIO: {
     ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID ?? "",
     AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN ?? "",
-    PHONE: process.env.TWILIO_PHONE ?? "",
+    SERVICE_SID: process.env.TWILIO_SERVICE_SID ?? "",
   }
 };

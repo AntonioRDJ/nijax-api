@@ -64,4 +64,25 @@ export class UserRepository {
       },
     })
   }
+
+  update(user: UserToUpdate) {
+    const {id, ...rest} = user;
+      
+    return this.userRepository.update({
+      data: {
+        ...rest,
+      },
+      where: {
+        id,
+      },
+      include: {
+        provider: true,
+      }
+    })
+  }
 };
+
+export interface UserToUpdate extends Prisma.UserUpdateInput {
+  id: string;
+};
+

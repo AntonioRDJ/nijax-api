@@ -25,11 +25,11 @@ export class NotifyNearbyProfessionalsService {
       if(provider.cellphone) {
         promises.push(
           twilioClient.messages.create({
-            from: Config.TWILIO.PHONE,
+            to: `+55${provider.cellphone}`,
+            messagingServiceSid: Config.TWILIO.SERVICE_SID,
             body: `
               Novo pedido disponível para se candidatar! Acesso o aplicativo e candidate-se. Título do pedido: ${order.title}
             `,
-            to: `whatsapp:+55${provider.cellphone}`
           })
         );
       }

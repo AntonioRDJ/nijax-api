@@ -5,6 +5,7 @@ import { FindUserByCellphoneController } from "../../../controllers/user/FindUse
 import { FindUserByCpfCnpjController } from "../../../controllers/user/FindUserByCpfCnpjController";
 import { FindUserByEmailController } from "../../../controllers/user/FindUserByEmailController";
 import { FindUserByIdController } from "../../../controllers/user/FindUserByIdController";
+import { UpdateUserController } from "../../../controllers/user/UpdateUserController";
 import auth from "../../../middlewares/auth";
 
 const router = Router();
@@ -33,6 +34,12 @@ router.get(
   "/:id",
   auth,
   Controller.attachToRouteHandler(FindUserByIdController)
+);
+
+router.patch(
+  "/",
+  auth,
+  Controller.attachToRouteHandler(UpdateUserController)
 );
 
 export default router;
