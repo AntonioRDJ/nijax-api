@@ -27,7 +27,7 @@ router.get(
 	Controller.attachToRouteHandler(ListOrderController)
 );
 
-router.put(
+router.patch(
 	"/:orderId",
 	Controller.attachToRouteHandler(UpdateOrderController)
 );

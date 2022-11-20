@@ -8,14 +8,14 @@ export class FindOrderService {
     private orderRepository: OrderRepository,
   ) {}
 
-  async execute(id: string) {
-    
-    const found = await this.orderRepository.find(id)
+  async execute(id: string, userId: string) {
+
+    const found = await this.orderRepository.find(id, userId);
 
     if(!found){
       throw new createHttpError.NotFound("Order Not Found");
     }
-
+    found.distance = found.distance / 1000;
     return found;
   }
 }

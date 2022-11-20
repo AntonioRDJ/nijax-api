@@ -57,11 +57,12 @@ export class OrderRepository {
     })
   }
 
-  find(id: string) {
+  find(id: string, userId: string) {
     return this.orderRepository.findFirst({
       where: {
         id: id,
         deletedAt : null,
+        userId, 
       },
       include: {
         user: {
@@ -90,8 +91,11 @@ export class OrderRepository {
         ...rest,
       },
       where: {
-        id,
-      }
+        id
+      },
+      include: {
+        candidacy: true,
+      },
     })
   }
 

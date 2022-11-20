@@ -2,6 +2,7 @@ import { Response } from "express";
 import { injectable } from "tsyringe";
 import { Request } from "../../@types/express";
 import { UserToUpdate } from "../../repositories/UserRepository";
+import { GetLocationService } from "../../services/location/GetLocationService";
 import { UpdateUserService } from "../../services/user/UpdateUserService";
 import { Controller } from "../Controller";
 
@@ -9,6 +10,7 @@ import { Controller } from "../Controller";
 export class UpdateUserController extends Controller {
   constructor(
     private service: UpdateUserService,
+    private getLocationService: GetLocationService,
   ) {
     super();
   }
@@ -38,6 +40,21 @@ export class UpdateUserController extends Controller {
           ...user.provider
         }
       };
+
+      const address = {
+        cep: user.provider.update.cep,
+        street: user.provider.update.street,
+        district: user.provider.update.district,
+        city: user.provider.update.city,
+        state: user.provider.update.state,
+        number: user.provider.update.number,
+      }
+
+      if(Object.values(address).every(v => !!v)) {
+        const location = await this.getLocationService.execute(address);
+        user.provider.update.lat = location.lat;
+        user.provider.update.lng = location.lng;        
+      }
 
       delete user.provider.update.userId;
     }

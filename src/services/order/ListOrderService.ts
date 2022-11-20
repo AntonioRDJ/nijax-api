@@ -18,7 +18,10 @@ export class ListOrderService {
   ) {}
 
   async execute(payload: Payload) {
-
-    return this.repository.list(payload)
+    const orders = await this.repository.list(payload);
+    orders.forEach((order) => {
+      order.distance = order.distance / 1000;
+    });
+    return orders;
   }
 }
