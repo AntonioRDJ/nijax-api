@@ -57,12 +57,33 @@ export class OrderRepository {
     })
   }
 
-  find(id: string, userId: string) {
+  async listOrderByDistance({userId, service, limit, offset}: ListOrderByDistanceParams) {
+    return await prisma.$queryRaw(
+      Prisma.sql`
+      SELECT o.*
+      FROM "order" o
+      LEFT JOIN candidacy c ON c.order_id = o.id
+      LEFT JOIN provider p ON  p."userId" = ${userId}
+      WHERE o."service" = ${service}::"Service"
+      AND o.user_id != p."userId"
+      AND (
+        c.provider_id != p.id 
+        OR c.provider_id is null
+      )
+      AND o.deleted_at is null
+      AND earth_box(ll_to_earth(o.lat, o.lng), o.distance) @> ll_to_earth(p.lat, p.lng)
+      AND earth_distance(ll_to_earth(o.lat, o.lng), ll_to_earth(p.lat, p.lng)) < o.distance
+      OFFSET ${offset}
+      LIMIT ${limit};`
+    );
+  }
+
+  find(id: string, userId?: string) {
     return this.orderRepository.findFirst({
       where: {
         id: id,
         deletedAt : null,
-        userId, 
+        userId
       },
       include: {
         user: {
@@ -139,4 +160,11 @@ export interface ListOrderParams {
   service?: Service;
   forProvider?: boolean;
   onlyCandidate?: boolean;
+}
+
+export interface ListOrderByDistanceParams {
+  limit: number;
+  offset: number;
+  userId?: string;
+  service?: Service;
 }
