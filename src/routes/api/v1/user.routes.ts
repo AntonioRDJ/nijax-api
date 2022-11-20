@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { Controller } from "../../../controllers/Controller";
 import { CreateUserController } from "../../../controllers/user/CreateUserController";
+import { DeleteUserController } from "../../../controllers/user/DeleteUserController";
 import { FindUserByCellphoneController } from "../../../controllers/user/FindUserByCellphoneController";
 import { FindUserByCpfCnpjController } from "../../../controllers/user/FindUserByCpfCnpjController";
 import { FindUserByEmailController } from "../../../controllers/user/FindUserByEmailController";
@@ -40,6 +41,12 @@ router.patch(
   "/",
   auth,
   Controller.attachToRouteHandler(UpdateUserController)
+);
+
+router.delete(
+  "/",
+  auth,
+  Controller.attachToRouteHandler(DeleteUserController)
 );
 
 export default router;

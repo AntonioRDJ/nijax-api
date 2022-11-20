@@ -2,36 +2,28 @@ import { Response } from "express";
 import createHttpError from "http-errors";
 import { injectable } from "tsyringe";
 import { Request } from "../../@types/express";
-import { DeleteOrderService } from "../../services/order/DeleteOrderService";
+import { DeleteUserService } from "../../services/user/DeleteUserService";
 import { Controller } from "../Controller"
 
 @injectable()
-export class DeleteOrderController extends Controller {
+export class DeleteUserController extends Controller {
   constructor(
-    private service: DeleteOrderService,
+    private service: DeleteUserService,
   ) {
     super();
   }
 
   async handle(req: Request, res: Response): Promise<void> {
 
-    const id = req.params.orderId;
+    const id = req.user?.id;
 
     if(!id){
-      throw new createHttpError.BadRequest("Invalid Order Id");
-    }
-
-    const userId = req.user?.id;
-
-    if(!userId) {
       throw new createHttpError.BadRequest("Invalid User");
     }
 
-    const orderDeleted = await this.service.execute(id, userId)
-
     res.status(200).json({
       data: {
-        order: orderDeleted
+        user: await this.service.execute(id)
       }
     });
   }
