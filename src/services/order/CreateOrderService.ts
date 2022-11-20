@@ -12,7 +12,9 @@ export class CreateOrderService {
     order.status = "OPENED";
     order.distance = kmToMetters(order.distance);
 
-    return this.orderRepository.create(order);
+    const orderCreated = await this.orderRepository.create(order);
+    orderCreated.distance = orderCreated.distance / 1000;
+    return orderCreated;
   }
 }
 

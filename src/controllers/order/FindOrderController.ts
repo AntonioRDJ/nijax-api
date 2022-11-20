@@ -21,9 +21,15 @@ export class FindOrderController extends Controller {
       throw new createHttpError.BadRequest("Invalid Order Id");
     }
 
+    const userId = req.user?.id;
+
+    if(!userId) {
+      throw new createHttpError.BadRequest("Invalid User");
+    }
+
     res.status(200).json({
       data: {
-        order: await this.service.execute(id)
+        order: await this.service.execute(id, userId)
       }
     });
   }

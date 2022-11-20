@@ -10,13 +10,14 @@ export class UpdateOrderService {
     private findOrderService : FindOrderService
   ) {}
 
-  async execute(order: OrderToUpdate) {
-    const foundOrder = await this.findOrderService.execute(order.id);
+  async execute(order: OrderToUpdate, userId: string) {
+    const foundOrder = await this.findOrderService.execute(order.id, userId);
 
     if(!foundOrder){
       throw new createHttpError.NotFound("Order Not Found");
     }
-
-    return this.orderRepository.update(order);
+    const orderUpdated = await this.orderRepository.update(order);
+    orderUpdated.distance = orderUpdated.distance / 1000;
+    return orderUpdated;
   }
 }
