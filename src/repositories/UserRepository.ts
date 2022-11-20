@@ -80,6 +80,14 @@ export class UserRepository {
       }
     })
   }
+
+  delete(id: string) {
+    return this.userRepository.delete({
+      where: {
+        id
+      }
+    })
+  }
 };
 
 export interface UserToUpdate extends Prisma.UserUpdateInput {
