@@ -19,6 +19,7 @@ export class ProviderRepository {
         JOIN "user" u on u.id = provider."userId"
         WHERE provider."service" = ${service}::"Service"
         AND provider."userId" != ${userId}
+        AND provider.show_notifications is true
         AND earth_box(ll_to_earth(${lat}, ${lng}), ${distance}) @> ll_to_earth(lat, lng)
         AND earth_distance(ll_to_earth(${lat}, ${lng}), ll_to_earth(lat, lng)) < ${distance}`
     );
