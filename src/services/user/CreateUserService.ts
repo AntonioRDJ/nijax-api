@@ -65,6 +65,7 @@ export interface CreateProvider {
   number: string;
   lat: string;
   lng: string;
+  showNotifications: boolean;
   experiences: Experience[] | Prisma.JsonArray,
   formations: Formation[] | Prisma.JsonArray,
   socialNetworks: SocialNetwork[] | Prisma.JsonArray,
