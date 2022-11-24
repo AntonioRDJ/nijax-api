@@ -5,6 +5,7 @@ import { CreateOrderController } from "../../../controllers/order/CreateOrderCon
 import { DeleteOrderController } from "../../../controllers/order/DeleteOrderController";
 import { FindOrderController } from "../../../controllers/order/FindOrderController";
 import { ListOrderController } from "../../../controllers/order/ListOrderController";
+import { RemoveCandidacyOrderController } from "../../../controllers/order/RemoveCandidacyOrderController";
 import { UpdateOrderController } from "../../../controllers/order/UpdateOrderController";
 import auth from "../../../middlewares/auth";
 
@@ -40,6 +41,11 @@ router.delete(
 router.patch(
 	"/set-candidacy/:orderId",
 	Controller.attachToRouteHandler(CandidacyOrderController)
+);
+
+router.patch(
+	"/remove-candidacy/:orderId",
+	Controller.attachToRouteHandler(RemoveCandidacyOrderController)
 );
 
 export default router;
