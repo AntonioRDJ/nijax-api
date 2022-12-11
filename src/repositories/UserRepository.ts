@@ -85,10 +85,6 @@ export class UserRepository {
     return this.userRepository.delete({
       where: {
         id
-      },
-      include: {
-        order: true,
-        provider: true,
       }
     })
   }
